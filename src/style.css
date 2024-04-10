@@ -1,0 +1,38 @@
+:root {
+    /* Background Colors */
+    --dark-bg-color: #1f1f1f;
+    --header-bg-color: hsl(272, 56%, 14%);
+
+
+    /* Text Color */
+    --txt-color: #efefee;
+
+
+    /* Font */
+    --font-family: "Kumbh Sans", sans-serif;
+    --font-size: 62.5%;
+
+    /* Padding */
+}
+
+html {
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--dark-bg-color);
+    color: var(--txt-color);;
+}
+
+.container {
+    margin: 2rem;
+}
