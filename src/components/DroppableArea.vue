@@ -1,101 +1,113 @@
 <template>
     <div class="droppable-area" 
+        ref="dropZone"
         :id="id" 
         @drop="drop($event)" 
-        @dragover.prevent
+        @dragover="handleDragOver($event)"
+        @dragleave="handleDragLeave($event)"
         @dragenter.prevent
-        >
+        @click="addEvent" >
+        
+        <div class="date-time-wrapper">
+            <div v-if="showDateTime" class="date-time"> {{ time.format('h:mma') }}</div>
+        </div>
+
+        <DraggableItem v-if="eventScheduled"></DraggableItem>
+
+
+        
     </div>
 </template>
 <script>
+import DraggableItem from './DraggableItem.vue';
+// import ModalEvent from './ModalEvent.vue';
 export default {
     name: 'DroppableArea',
-    props: ["id"],
+    props: ["id", "time", "day", "events"],
+    emits: ['addEvent'],
     data() {
         return {
-            offsetTop: null,
-            droppableItemHeightOffset: 60, // The height of the droppable item is 60px
+            showDateTime: false,
+            // modalOpen: false,
         }
     },
     mounted() {
-        this.offsetTop = document?.getElementById(this.id)?.offsetTop
+    },
+    computed: {
+        eventScheduled() {
+            // this.events.forEach( event => {
+            //     console.log('event',event.dateTime.format('h:mma'));
+            //     console.log('time',this.time.format('h:mma'));
+            //     console.log(event.dateTime.format('h:mma') == this.time.format('h:mma'));
+            //     if(event.dateTime.format('h:mma') == this.time.format('h:mma')) {
+            //         return true
+            //     }
+            // })
+
+            if(this.events[0].dateTime.format('h:mma') == this.time.format('h:mma')) {
+                    return true
+                }
+
+            return false
+        },
     },
     methods: {
         drop(event) {
             event.preventDefault();
-            var data = event.dataTransfer.getData("text");
-            var draggableElement = document.getElementById(data);
+            
+            // Get the data from the draggable item - data will contain draggableItem's id
+            var draggableItemId = event.dataTransfer.getData("text");
+            var draggableElement = document.getElementById(draggableItemId);
+
+
+            event.dataTransfer.setData("text", this.time.format('h:mma') );
+            console.log('draggableElement', event.dataTransfer.getData("text"));
+
+            // Select our current droppable area
             var container = document.getElementById(this.id);
             container.appendChild(draggableElement);
+
+            // reset the showDateTime tool tip 
+            this.showDateTime = false;
+
         },
-        // drop(event) {
-        //     // event.preventDefault();
+        handleDragOver(e) {
+            e.preventDefault();
+            console.log('DRAGOVER',e.target);
+            // this.$refs.dropZone.style.backgroundColor = "red";
+            this.showDateTime = true;
+        },
+        handleDragLeave(e) {
+            e.preventDefault();
+            console.log('DRAGLeave',e);
+            this.$refs.dropZone.style.backgroundColor = "var(--calendar-bg-color)";
+            this.showDateTime = false;
+
+        },
+        addEvent() {
+            this.modalOpen = true;
+            this.$emit('addEvent', this.time)
+        },
+        // closeModal() {
+        //     this.modalOpen = false;
+
+        //     // setTimeout( () => {
+        //     //     this.modalOpen = false;
+
+        //     // }, 200)
+        //     console.log('closeModal', this.modalOpen);
+        // }
 
 
-        //     // Get the elements id from dataTransfer
-        //     var data = event.dataTransfer.getData("text");
-        //     var draggableElement = document.getElementById(data);
-
-
-        //     var dropPosition = event.clientY - event.target.offsetTop //- this.droppableItemHeightOffset;
-        //     console.log('event.clientY', event.clientY)
-        //     console.log('event.target.offsetTop', event.target.offsetTop)
-        //     console.log('event.clientY - event.target.offsetTop' ,event.clientY - event.target.offsetTop)
-        //     console.log('dropPosition BEFORE', dropPosition)
-        //     console.log('---------------------------------' )
-
-
-        //     // Calculate the maximum drop position within the droppable area
-        //     // var maxDropPosition = event.target.offsetHeight - draggableElement.offsetHeight;
-        //     // var maxDropPosition = 180;
-        //     // console.log('maxDropPosition', maxDropPosition)
-
-        //     if(dropPosition >= 180) {
-        //         dropPosition = 180;
-        //     } 
-        //     else if(dropPosition >= 120) {
-        //         dropPosition = 120;
-        //     }
-        //     else if(dropPosition >= 60) {
-        //         dropPosition = 60;
-        //     } else {
-        //         dropPosition = 0;
-        //     }
-        //     console.log('dropPosition AFTER', dropPosition)
-
-        //     // Append the draggable element to the droppable area at the calculated drop position
-        //     var container = document.getElementById(this.id);
-        //     container.appendChild(draggableElement);
-
-        //     // Set the position of the draggable element within the droppable area
-        //     draggableElement.style.position = "absolute";
-        //     draggableElement.style.top = dropPosition + "px";
-        //     draggableElement.style.left = 0;
-        // },
-
-    }
+    },
+    components: {
+        DraggableItem,
+        // ModalEvent,
+    },
     
 }
 </script>
 <style>
-/* .droppable-area {
-    
-    padding: 1.2rem;
-    height: 240px;
-    border: 5px dotted white;
-    border-radius: 8px;
-    position: relative;
-} */
 
-.droppable-area {
-    position: relative;
 
-    background: rgb(50, 50, 47);
-    height: 25%;
-    width: 100%;
-}
-
-.droppable-area:hover {
-    background-color: yellow;
-}
 </style>

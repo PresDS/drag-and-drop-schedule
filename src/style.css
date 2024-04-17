@@ -2,6 +2,7 @@
     /* Background Colors */
     --dark-bg-color: #1f1f1f;
     --header-bg-color: hsl(272, 56%, 14%);
+    --calendar-bg-color: rgb(50, 50, 47);
 
 
     /* Text Color */
@@ -35,4 +36,81 @@ body {
 
 .container {
     margin: 2rem;
+}
+
+/* Weekly Schedule */
+
+table, td, th {
+    border-collapse: collapse;
+}
+
+th {
+    /* background: darkmagenta; */
+    padding: 12px;
+}
+
+td {
+    /* height: 240px; */
+    height: 80px;
+    border: 1px solid white;
+    min-width: 120px;
+}
+
+.y-axis-label {
+    text-align: right;
+    padding-right: 16px;
+}
+
+/* Droppable Area */
+.droppable-area {
+    position: relative;
+
+    background: var(--calendar-bg-color);
+    height: 25%;
+    width: 100%;
+}
+
+.droppable-area:hover {
+    /* background-color: yellow; */
+}
+
+.droppable-area .date-time-wrapper {
+    position: relative;
+    /* background: yellow; */
+    /* height: 100%;
+    width: 100%; */
+}
+
+.droppable-area .date-time {
+    position: absolute;
+    /* top: -30px; */
+    left: -40px;
+    /* background: yellow; */
+    /* height: 100%;
+    width: 100%; */
+}
+
+
+/* Draggable Item */
+.draggable-item {
+    /* height: 2rem; */
+    /* width: 2.4rem; */
+    padding: 1.2rem;
+    background: lightcoral;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    max-height: 60px;
+    position: absolute;
+    z-index: 1;
+
+    resize: vertical;
+}
+
+.draggable-item:hover {
+    cursor: pointer;
 }

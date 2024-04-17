@@ -3,7 +3,6 @@
         <!-- <h2>Sandbox</h2> -->
 
         <!-- <SimpleDragAndDropTest /> -->
-        <DraggableItem />
         <WeeklySchedule />
 
         <!-- <DroppableArea :id="1" :key="id"/>
@@ -15,14 +14,14 @@
 </template>
 <script>
 // import SimpleDragAndDropTest from './SimpleDragAndDropTest.vue';
-import DraggableItem from '../src/components/DraggableItem.vue';
+// import DraggableItem from '../src/components/DraggableItem.vue';
 // import DroppableArea from './DroppableArea.vue';
 import WeeklySchedule from '../src/components/WeeklySchedule.vue'; 
 export default {
     name: "Sandbox",
     components: {
         // SimpleDragAndDropTest,
-        DraggableItem,
+        // DraggableItem,
         // DroppableArea
         WeeklySchedule
     }

@@ -1,18 +1,36 @@
 <template>
     <td :id="day+hour.format('ha')">
-       <DroppableArea v-for="q in quartersOfTheHour" :key="q.format('h:mma')" :id="day+q.format('h:mma')"/>
+       <DroppableArea v-for="time in quartersOfTheHour" 
+        :key="time.format('h:mma')" 
+        :id="day+time.format('h:mma')" 
+        :day="day"
+        :time="time"
+        :events="events" 
+        @addEvent="addEvent"/>
     </td>
+    <ModalEvent v-if="modalOpen === true" 
+        :eventTime="eventTime"
+        @closeModal="closeModal"
+        @saveEvent="saveEvent"
+    > </ModalEvent>
+
 </template>
 <script>
 import DroppableArea from './DroppableArea'
+import ModalEvent from './ModalEvent.vue';
+
 
 export default {
     name: 'DayTimeRowItem',
-    props: ['day', 'hour'],
+    props: ['day', 'hour', 'events'],
+    emits: ['addEvent', 'saveEvent'],
     data() {
         return {
             quartersOfTheHour: [],
             minutesToAdd: [0, 15, 30, 45],
+            modalOpen: false,
+            eventTime: null,
+
         }
     },
     created() {
@@ -20,8 +38,32 @@ export default {
             this.quartersOfTheHour.push(this.hour.add(minutes, "minutes"))
         })
     },
+    methods: {
+        addEvent(time) {
+            this.modalOpen = true;
+            this.eventTime = time;
+
+            console.log('addEvent', time);
+
+        },
+        saveEvent(event) {
+            console.log(event);
+            this.modalOpen = false;
+            this.$emit('saveEvent', event)
+        },
+        closeModal() {
+            this.modalOpen = false;
+
+            // setTimeout( () => {
+            //     this.modalOpen = false;
+
+            // }, 200)
+            console.log('closeModal', this.modalOpen);
+        }
+    },
     components: {
         DroppableArea,
+        ModalEvent,
     },
 }
 </script>
