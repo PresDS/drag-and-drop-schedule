@@ -41,8 +41,8 @@ export default {
             // hoursArray: ['08:00am', '09:00am', '10:00am', '11:00am', '12:00pm', '01:00pm', '02:00pm', '03:00pm', '04:00pm', '05:00pm'],
             hoursArray: [],
             dayjs: dayjs(),
-            startingTime: dayjs().startOf('week').hour(5), // 6am
-            endingTime: dayjs().startOf('week').hour(22), // 10pm
+            startingTime: dayjs().startOf('week').hour(5).second(0), // 6am
+            endingTime: dayjs().startOf('week').hour(22).second(0), // 10pm
 
             events: [ ],
 
@@ -96,6 +96,7 @@ export default {
             // // Parse the new time and set it to the existing date
             const modifiedDateTime = day.hour(hourStr)
                                      .minute(minuteStr)
+                                     .second(0)
 
             console.log(modifiedDateTime.toString()); // Output the modified date and time
             return modifiedDateTime

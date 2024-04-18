@@ -2,10 +2,14 @@
     <div class="modal-backdrop">
         <div class="modal-body">
             
-            <input type="text" v-model="title" />
+            <input type="text" v-model="title" placeholder="Event Title"/>
     
-            <button @click="closeModal">Cancel</button>
-            <button @click="saveEvent">Save</button>
+            <input type="time" v-model="timeString">
+            <input type="date" v-model="dateString">
+            <div class="button-group">
+                <button @click="closeModal">Cancel</button>
+                <button @click="saveEvent">Save</button>
+            </div>
         </div>
     </div>
 </template>
@@ -16,9 +20,14 @@ export default {
     emits: ['closeModal', 'saveEvent'],
     data() {
         return {
-            title: '',
-
+            title: 'hello',
+            dateString: '',
+            timeString: '',
         }
+    },
+    created() {
+        this.dateString = this.eventTime.format("YYYY-MM-DD");
+        this.timeString = this.eventTime.format("hh:mm:ss");
     },
     methods: {
         closeModal() {

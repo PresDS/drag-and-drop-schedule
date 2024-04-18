@@ -44,9 +44,16 @@ export default {
             //     }
             // })
 
-            if(this.events[0].dateTime.format('h:mma') == this.time.format('h:mma')) {
+            // if(this.events[0].dateTime.format('h:mma') == this.time.format('h:mma')) {
+            //         return true
+            // }
+            console.log('this.events[0].dateTime', this.events[0].dateTime.format('MM-DD-YYYY hh:mm:ss'));
+            console.log('this.time', this.time.format('MM-DD-YYYY hh:mm:ss'));
+            
+            // checks if its the same dateTime down to the minute
+            if(this.events[0].dateTime.isSame(this.time, 'minute')) {
                     return true
-                }
+            }
 
             return false
         },
