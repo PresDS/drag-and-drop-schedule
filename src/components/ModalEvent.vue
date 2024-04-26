@@ -14,6 +14,9 @@
     </div>
 </template>
 <script>
+// ShortUniqueId - https://www.npmjs.com/package/short-unique-id?activeTab=readme
+import ShortUniqueId from 'short-unique-id';
+
 export default {
     name: 'ModalEvent',
     props: ['eventTime'],
@@ -23,18 +26,21 @@ export default {
             title: 'hello',
             dateString: '',
             timeString: '',
+            uid: null,
         }
     },
     created() {
         this.dateString = this.eventTime.format("YYYY-MM-DD");
         this.timeString = this.eventTime.format("hh:mm:ss");
+        const uid = new ShortUniqueId({ length: 10 });
+        this.uid = uid.rnd();
     },
     methods: {
         closeModal() {
             this.$emit('closeModal');
         },
         saveEvent() {
-            this.$emit('saveEvent', { title: this.title, dateTime: this.eventTime })
+            this.$emit('saveEvent', { id: this.uid, title: this.title, dateTime: this.eventTime })
         }
     },
     

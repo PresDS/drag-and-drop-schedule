@@ -65,7 +65,7 @@ export default {
             })
         })
 
-        this.events.push({title: 'Gym', dateTime: this.hoursArray[0] })
+        // this.events.push({title: 'Gym', dateTime: this.hoursArray[0] })
 
     },
     methods: {
@@ -80,25 +80,15 @@ export default {
 
         },
         getDateTime(day, hour) {
-            console.log('--------getDateTime---------');
-            console.log('DAY', day);
-            console.log('HOUR', hour);
+        
             let hourStr = hour.hour()
             let minuteStr = hour.minute()
-            console.log('hourStr', hourStr);
-            console.log('minuteStr', minuteStr);
-            // console.log('timeString', timeString);
-            // const parsedTime = dayjs(timeString);
-            // console.log('parsedTime', parsedTime);
-            // console.log('day.hour(parsedTime.hour()', day.hour(parsedTime.hour()));
-
-
+            
             // // Parse the new time and set it to the existing date
             const modifiedDateTime = day.hour(hourStr)
                                      .minute(minuteStr)
                                      .second(0)
 
-            console.log(modifiedDateTime.toString()); // Output the modified date and time
             return modifiedDateTime
         },
         saveEvent(event) {

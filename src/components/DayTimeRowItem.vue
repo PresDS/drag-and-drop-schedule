@@ -42,8 +42,7 @@ export default {
         addEvent(time) {
             this.modalOpen = true;
             this.eventTime = time;
-
-            console.log('addEvent', time);
+            // console.log('addEvent', time);
 
         },
         saveEvent(event) {
@@ -53,12 +52,6 @@ export default {
         },
         closeModal() {
             this.modalOpen = false;
-
-            // setTimeout( () => {
-            //     this.modalOpen = false;
-
-            // }, 200)
-            console.log('closeModal', this.modalOpen);
         }
     },
     components: {
