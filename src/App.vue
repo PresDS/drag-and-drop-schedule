@@ -2,21 +2,22 @@
   <div class="container">
     <TheHeader />
 
-
-    <Sandbox />
+    <WeeklySchedule />
   </div>
 </template>
 
 <script>
 // import dayjs from "dayjs";
 import TheHeader from "./components/TheHeader.vue";
-import Sandbox from "../sandbox/Sandbox.vue";
+import WeeklySchedule from "./components/WeeklySchedule.vue";
+// import Sandbox from "../sandbox/Sandbox.vue";
 
 export default {
   name: 'App',
   components: {
     TheHeader,
-    Sandbox,
+    // Sandbox,
+    WeeklySchedule,
   },
 
 };

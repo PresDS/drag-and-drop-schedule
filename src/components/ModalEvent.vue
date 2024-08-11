@@ -1,37 +1,42 @@
 <template>
-    <div class="modal-backdrop">
-        <div class="modal-body">
-            
-            <input type="text" v-model="title" placeholder="Event Title"/>
-    
-            <input type="time" v-model="timeString">
-            <input type="date" v-model="dateString">
-            <div class="button-group">
-                <button @click="closeModal">Cancel</button>
-                <button @click="saveEvent">Save</button>
+    <Teleport to="body">
+        <div class="modal-backdrop">
+            <div class="modal-body">
+                <div class="event-form">
+                    <input type="text" v-model="title" placeholder="Event Title"/>
+                    <input type="time" v-model="startTime">
+                    <input type="time" v-model="endTime">
+                    <input type="date" v-model="dateString">
+                    <div class="button-group">
+                        <button @click="closeModal">Cancel</button>
+                        <button @click="saveEvent">Save</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </Teleport>
 </template>
 <script>
 // ShortUniqueId - https://www.npmjs.com/package/short-unique-id?activeTab=readme
 import ShortUniqueId from 'short-unique-id';
-
+import dayjs from 'dayjs'
 export default {
     name: 'ModalEvent',
     props: ['eventTime'],
     emits: ['closeModal', 'saveEvent'],
     data() {
         return {
-            title: 'hello',
+            title: '',
             dateString: '',
-            timeString: '',
+            startTime: '',
+            endTime: '',
             uid: null,
         }
     },
     created() {
         this.dateString = this.eventTime.format("YYYY-MM-DD");
-        this.timeString = this.eventTime.format("hh:mm:ss");
+        this.startTime = this.eventTime.format("hh:mm:ss");
+        this.endTime = this.eventTime.add(15, 'minute').format("hh:mm:ss");
         const uid = new ShortUniqueId({ length: 10 });
         this.uid = uid.rnd();
     },
@@ -40,7 +45,13 @@ export default {
             this.$emit('closeModal');
         },
         saveEvent() {
-            this.$emit('saveEvent', { id: this.uid, title: this.title, dateTime: this.eventTime })
+            debugger;
+            this.$emit('saveEvent', {
+                id: this.uid,
+                title: this.title,
+                startTime: dayjs(this.dateString + this.startTime),
+                endTime: dayjs(this.dateString + this.endTime),
+            })
         }
     },
     
@@ -68,6 +79,30 @@ export default {
         border-radius: 5px;
         background: #ffff;
         z-index: 10;
+
+    }
+
+    .modal-body .event-form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 24px;
+        height: 100%;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        flex: 1;
+    }
+
+    .button-group button {
+        padding: 6px 8px;
+        background: hsla(246, 79%, 81%, 0.893);
+        border: 0;
+        border-radius: 4px;
+        color: #2f2041;
     }
     
 </style>
