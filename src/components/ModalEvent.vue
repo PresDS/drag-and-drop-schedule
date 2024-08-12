@@ -20,6 +20,7 @@
 // ShortUniqueId - https://www.npmjs.com/package/short-unique-id?activeTab=readme
 import ShortUniqueId from 'short-unique-id';
 import dayjs from 'dayjs'
+import { useEventsStore } from '../store/store';
 export default {
     name: 'ModalEvent',
     props: ['eventTime'],
@@ -31,21 +32,34 @@ export default {
             startTime: '',
             endTime: '',
             uid: null,
+            store: null,
         }
     },
     created() {
+        this.store = useEventsStore();
+
         this.dateString = this.eventTime.format("YYYY-MM-DD");
         this.startTime = this.eventTime.format("hh:mm:ss");
         this.endTime = this.eventTime.add(15, 'minute').format("hh:mm:ss");
         const uid = new ShortUniqueId({ length: 10 });
         this.uid = uid.rnd();
     },
+    computed: {
+        events() {
+            return this.store.events;
+        },
+    },
     methods: {
         closeModal() {
             this.$emit('closeModal');
         },
         saveEvent() {
-            debugger;
+            this.store.saveEvent({
+                id: this.uid,
+                title: this.title,
+                startTime: dayjs(this.dateString + this.startTime),
+                endTime: dayjs(this.dateString + this.endTime),
+            });
             this.$emit('saveEvent', {
                 id: this.uid,
                 title: this.title,
