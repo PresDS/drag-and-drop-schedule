@@ -89,7 +89,6 @@ export default {
 
             return modifiedDateTime
         },
-
         addEvent(time) {
             console.log('addEvent', time);
             this.eventTime = time;

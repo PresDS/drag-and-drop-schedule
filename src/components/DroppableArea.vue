@@ -12,7 +12,12 @@
             <div v-if="showDateTime" class="date-time"> {{ time.format('h:mma') }}</div>
         </div>
 
-        <DraggableItem v-if="eventInfo" :eventInfo="eventInfo" :key="eventInfo.id" :setIsResizing="handleSetIsResizing" :isResizing="isResizing"></DraggableItem>
+        <DraggableItem v-if="eventInfo" 
+            :eventInfo="eventInfo" 
+            :key="eventInfo.id" 
+            :setIsResizing="handleSetIsResizing" 
+            :isResizing="isResizing">
+        </DraggableItem>
     </div>
 </template>
 <script>

@@ -6,8 +6,8 @@
                 <span>{{ eventInfo.startTime.format("h:mm") }}</span>
             </div>
             <div class="expandable-area"
-             @mousedown="handleMouseDown($event)" 
-             >
+                @mousedown="handleMouseDown($event)" 
+            >
             </div>
         </div>
     </div>
