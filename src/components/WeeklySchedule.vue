@@ -16,28 +16,17 @@
                 :hour="getDateTime(day, hour)" 
                 :day="day.format('ddd')"
                 :key="day.format('ddd') + hour.format('h:mma')" 
-                :events="events" 
-                @addEvent="addEvent"
-                @updateEvent="updateEvent" 
             />
         </tr>
-        <ModalEvent v-if="modalOpen === true" 
-            :eventTime="eventTime" 
-            @closeModal="closeModal" 
-            @saveEvent="saveEvent">
-        </ModalEvent>
-
     </table>
 </template>
 <script>
-import ModalEvent from './ModalEvent.vue';
 import DayTimeRowItem from './DayTimeRowItem'
 import dayjs from 'dayjs'
 export default {
     name: 'WeeklySchedule',
     components: {
         DayTimeRowItem,
-        ModalEvent,
     },
     data() {
         return {
@@ -46,10 +35,6 @@ export default {
             dayjs: dayjs(),
             startingTime: dayjs().startOf('week').hour(5).second(0), // 6am
             endingTime: dayjs().startOf('week').hour(22).second(0), // 10pm
-
-            events: [ ],
-            eventTime: null,
-            modalOpen: false,
 
         }
     },
@@ -86,28 +71,9 @@ export default {
             const modifiedDateTime = day.hour(hourStr)
                                      .minute(minuteStr)
                                      .second(0)
-
             return modifiedDateTime
         },
-        addEvent(time) {
-            console.log('addEvent', time);
-            this.eventTime = time;
-            this.modalOpen = true;
 
-        },
-        updateEvent(event) {
-            console.log('updateEvent', event)
-        },
-        saveEvent(event) {
-            console.log(event);
-            this.modalOpen = false;
-            this.events.push(event)
-            this.eventTime = null;
-
-        },
-        closeModal() {
-            this.modalOpen = false;
-        }
     },
 
 }

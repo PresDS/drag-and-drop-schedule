@@ -1,13 +1,11 @@
 <template>
     <td :id="day+hour.format('ha')">
        <DroppableArea v-for="time in quartersOfTheHour" 
-        :key="day+time.format('h:mma')" 
-        :id="day+time.format('h:mma')" 
-        :day="day"
-        :time="time"
-        :events="events" 
-        @addEvent="addEvent"
-        @updateEvent="updateEvent"/>
+            :key="day+time.format('h:mma')" 
+            :id="day+time.format('h:mma')" 
+            :day="day"
+            :time="time"
+        />
     </td>
 </template>
 <script>
@@ -15,8 +13,7 @@ import DroppableArea from './DroppableArea'
 
 export default {
     name: 'DayTimeRowItem',
-    props: ['day', 'hour', 'events'],
-    emits: ['addEvent', 'updateEvent'],
+    props: ['day', 'hour'],
     components: {
         DroppableArea,
     },
@@ -33,12 +30,7 @@ export default {
         })
     },
     methods: {
-        addEvent(time) {
-            this.$emit('addEvent', time)
-        },
-        updateEvent(event) {
-            this.$emit('updateEvent', event)
-        },
+
     },
     
 }

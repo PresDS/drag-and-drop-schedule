@@ -18,28 +18,45 @@
             :setIsResizing="handleSetIsResizing" 
             :isResizing="isResizing">
         </DraggableItem>
+
+        <ModalEvent v-if="modalOpen === true" 
+            :eventTime="eventTime" 
+            @closeModal="closeModal" 
+            @saveEvent="saveEvent">
+        </ModalEvent>
     </div>
 </template>
 <script>
 import DraggableItem from './DraggableItem.vue';
+import ModalEvent from './ModalEvent.vue';
+import { useEventsStore } from '../store/store';
+
+
 export default {
     name: 'DroppableArea',
-    props: ["id", "time", "day", "events"],
-    emits: ['addEvent', 'updateEvent'],
+    props: ["id", "time", "day"],
     components: {
         DraggableItem,
+        ModalEvent,
     },
     data() {
         return {
             showDateTime: false,
             eventInfo: null,
+            eventTime: null,
             draggableElementId: null,
             isResizing: null,
+            modalOpen: false,
+            store: null,
+
         }
+    },
+    created() {
+        this.store = useEventsStore();
     },
     mounted() {
         // Initially checks for any scheduled events
-        this.getEvent()
+        // this.getEvent()
     },
     watch: {
         events: {
@@ -53,7 +70,9 @@ export default {
         }
     },
     computed: {
-        
+        events() {
+            return this.store?.events;
+        },
     },
     methods: {
         drop(e) {
@@ -63,15 +82,10 @@ export default {
             var draggableElement = document.getElementById(draggableItemId);
 
             e.dataTransfer.setData("text", this.time.format('h:mma') );
-            console.log('draggableItemId', draggableItemId);
-            console.log('draggableElement', draggableElement);
+            // console.log('draggableItemId', draggableItemId);
+            // console.log('draggableElement', draggableElement);
 
             let event = this.events.find(event => event.id === draggableItemId)
-            // if(event) {
-            //     console.log('AHAHAHAHAHA', event);
-            //     event.dateTime = this.time
-            //     this.eventInfo = event
-            // }
             
             // TODO update the event time
             this.$emit('updateEvent', {...event, startTime: this.time})
@@ -101,7 +115,17 @@ export default {
         },
         addEvent(event) {
             console.log('add Event', event)
-            this.$emit('addEvent', this.time)
+            this.eventTime = this.time;
+            this.modalOpen = true;
+        },
+        saveEvent(event) {
+            console.log(event);
+            this.modalOpen = false;
+            this.eventTime = null;
+
+        },
+        closeModal() {
+            this.modalOpen = false;
         },
         getEvent() {
             for (let i = 0; i < this.events.length; i++) {
