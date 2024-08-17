@@ -11,5 +11,10 @@ export const useEventsStore = defineStore('events', {
         saveEvent(eventObj) {
             this.events.push(eventObj);
         },
+        updateEventEndTime(eventId, updateEventEndTime) {
+            let eventToModify = this.events.find(event => event.id === eventId);
+            console.log(`updateEventEndTime`, eventToModify);
+            eventToModify.endTime = updateEventEndTime;
+        },
     },
 })

@@ -3,7 +3,9 @@
         <div class="inner-wrapper">
             <div class="event-info">
                 <span>{{ eventInfo.title }}</span>
-                <span>{{ eventInfo.startTime.format("h:mm") }}</span>
+                <span>{{ eventInfo.startTime.format("h:mma") }}</span>
+                <span> - </span>
+                <span>{{ eventInfo.endTime.format("h:mma") }}</span>
             </div>
             <div class="expandable-area"
                 @mousedown="handleMouseDown($event)" 
@@ -13,6 +15,7 @@
     </div>
 </template>
 <script>
+import { useEventsStore } from '../store/store';
 
 export default {
     name: 'DraggableItem',
@@ -25,8 +28,16 @@ export default {
             initialMouseY: null,
         }
     },
+    created() {
+        this.store = useEventsStore();
+    },
     mounted() {
         this.initialHeight = this.$refs.dragItem.clientHeight;
+    },
+    computed: {
+        events() {
+            return this.store?.events;
+        },
     },
     methods: {
         drag(event) {
@@ -54,19 +65,56 @@ export default {
             const newHeight = this.initialHeight + (e.clientY - this.initialMouseY);
             this.$refs.dragItem.style.height = `${newHeight}px`;
             
-            console.log('mouseup', e)
+            console.log('mousemove', e)
             
         },
         stopResize(e) {
             e.preventDefault();
             // e.stopPropagation();
             e.stopImmediatePropagation();
+            console.log('mouseup', e)
             this.setIsResizing(false);
-            console.log('mousemove', e)
-            console.log('dragItem inner Height', this.$refs.dragItem.clientHeight)
+            
             document.removeEventListener('mousemove', this.resize);
             document.removeEventListener('mouseup', this.stopResize);
 
+            this.$refs.dragItem.style.height = this.roundToClosest20(this.$refs.dragItem.clientHeight) + 'px';
+            console.log('dragItem inner Height', this.$refs.dragItem.clientHeight)
+            this.calculateEndTime();
+
+
+        },
+        roundToClosest20(num) {
+            return Math.round(num / 20) * 20;
+        },
+        roundToClosest15(num) {
+            return Math.round(num / 15) * 15;
+        },
+        calculateEndTime() {
+            /**
+             * This function will use the draggableClientHeight to calculate the end time of the event
+             */
+
+            // Default size of DraggableItem is 20px which represents a 15 minute interval
+            const heightDivisor = 20;
+            const timeInterval = 15;
+
+            let newHeight = this.$refs.dragItem.clientHeight;
+
+            let eventDurationMultiplier = (newHeight / heightDivisor);
+
+            console.log('eventDurationMultiplier ', eventDurationMultiplier);
+
+            let eventTimeInMinutes = this.roundToClosest15(eventDurationMultiplier * timeInterval);
+
+            console.log('eventTimeInMinutes', eventTimeInMinutes);
+
+            let updateEventEndTime = this.eventInfo.startTime.add(eventTimeInMinutes, 'minutes');
+            console.log('updateEventEndTime', updateEventEndTime);
+
+            this.store.updateEventEndTime(this.eventInfo.id, updateEventEndTime)
+
+            
         },
     },
 }

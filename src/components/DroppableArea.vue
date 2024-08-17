@@ -85,10 +85,11 @@ export default {
             // console.log('draggableItemId', draggableItemId);
             // console.log('draggableElement', draggableElement);
 
-            let event = this.events.find(event => event.id === draggableItemId)
+            // let event = this.events.find(event => event.id === draggableItemId)
             
-            // TODO update the event time
-            this.$emit('updateEvent', {...event, startTime: this.time})
+            // // TODO update the event time
+            // this.$emit('updateEvent', {...event, startTime: this.time})
+            // this.store.updateEvent(event, this.time);
 
             // // Select our current droppable area
             var container = document.getElementById(this.id);
@@ -138,6 +139,9 @@ export default {
             this.eventInfo = null
         },
         handleSetIsResizing(isResizing) {
+            /**
+             *  Handing isResizing in the parent to avoid any unwanted to click events
+             */
             this.isResizing = isResizing;
         }
 
